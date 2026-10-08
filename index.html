@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Own It. If you are overweight, it's on you. Greedy, lazy or unwise, and what to do about it.">
+<title>Own It</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout concept: a weighbridge ticket. Left-aligned sections ruled off like a ledger, one ticket card in the hero, a red STAMP used once per theme as the only loud element. */
+:root{
+  --bg:#E3E8E4;
+  --paper:#F5F6F2;
+  --ink:#16201B;
+  --muted:#4F5D56;
+  --rule:#B4BEB8;
+  --stamp:#B42318;
+  --go:#1B5E4B;
+  --low:#5D6F8C; --on-low:#FFFFFF;
+  --ok:#1B5E4B; --on-ok:#FFFFFF;
+  --amber:#E8A317; --on-amber:#1F1500;
+  --red:#B42318; --on-red:#FFFFFF;
+  --display:'Saira Stencil One','Arial Narrow',Impact,sans-serif;
+  --body:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101612; --paper:#18211C; --ink:#E7EDE9; --muted:#9AA8A1; --rule:#31403A; --stamp:#F27B6E; --go:#58C1A0;
+    --low:#9DB0CC; --on-low:#0E1A2E; --ok:#58C1A0; --on-ok:#06201A; --amber:#F2B93B; --on-amber:#1F1500; --red:#F27B6E; --on-red:#2A0A06;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101612; --paper:#18211C; --ink:#E7EDE9; --muted:#9AA8A1; --rule:#31403A; --stamp:#F27B6E; --go:#58C1A0;
+  --low:#9DB0CC; --on-low:#0E1A2E; --ok:#58C1A0; --on-ok:#06201A; --amber:#F2B93B; --on-amber:#1F1500; --red:#F27B6E; --on-red:#2A0A06;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font:400 17px/1.6 var(--body);
+  font-synthesis:none;
+  margin:0;
+  padding-inline:clamp(16px,4vw,48px);
+  padding-block:20px 56px;
+}
+.wrap{max-width:1080px;margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:.98;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:var(--go)}
+:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+.muted{color:var(--muted)}
+
+/* top bar */
+.bar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.bar{align-items:flex-end}
+.bar .brand{font:800 clamp(56px,11vw,120px)/.9 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.bar .tag{padding-bottom:6px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;padding-block:48px 56px;align-items:start}
+.hero h1{font-size:clamp(34px,5.6vw,68px);margin-block:14px 22px}
+.hero .lede{font-size:clamp(18px,2.2vw,22px);line-height:1.5;max-width:34em}
+.hero .lede + .lede{margin-top:14px;color:var(--muted)}
+.ticket{background:var(--paper);border:2px solid var(--ink);padding:18px 20px 20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.t-head{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--ink);padding-bottom:10px}
+.t-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.t-list li{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:12px;align-items:start}
+.t-list .box{width:24px;height:24px;border:2px solid var(--ink);display:grid;place-items:center;font:500 14px/1 var(--mono)}
+.t-list b{font:800 26px/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.t-list i{grid-column:2;font-style:normal;color:var(--muted);font-size:15px;line-height:1.35}
+.t-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px dashed var(--ink);padding-top:14px}
+.stamp{font:800 28px/1 var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--stamp);border:3px solid var(--stamp);padding:6px 14px 4px;transform:rotate(-5deg);display:inline-block}
+
+/* sections */
+section{border-top:2px solid var(--ink);padding-block:52px}
+.row{display:grid;grid-template-columns:190px minmax(0,1fr);gap:20px 40px}
+.row > .mono{padding-top:8px;color:var(--muted)}
+h2{font-size:clamp(28px,4vw,46px);line-height:1.08}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.2vw,36px);line-height:1.15;text-wrap:balance;max-width:20em}
+.prose{display:flex;flex-direction:column;gap:16px;max-width:40em}
+.eqn{font-family:var(--mono);font-size:15px;background:var(--paper);border:1px solid var(--rule);padding:14px 16px;overflow-x:auto}
+.eqn span{white-space:nowrap}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px;margin-top:28px}
+.card{background:var(--paper);border:1px solid var(--rule);border-top:6px solid var(--ink);padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card h3{font-size:36px}
+.card .def{font-size:18px;line-height:1.4}
+.card h4{font:500 12.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 0 0}
+.card ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:7px}
+.card li::marker{color:var(--muted)}
+.card .fix li::marker{color:var(--go)}
+
+/* table */
+.tbl{overflow-x:auto;margin-top:32px;border:1px solid var(--rule);background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:480px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--rule)}
+th{font:500 12.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.note{font-size:14.5px;color:var(--muted);margin-top:10px}
+
+/* self check */
+.check{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px;margin-top:28px}
+fieldset{border:1px solid var(--rule);background:var(--paper);margin:0;padding:16px 18px 18px;min-width:0}
+legend{font:800 26px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;padding-inline:6px}
+.chk{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;padding-block:8px;cursor:pointer;line-height:1.4}
+.chk input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--stamp)}
+.result{margin-top:20px;background:var(--paper);border:2px solid var(--ink);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px 32px;align-items:center}
+.meter{display:grid;grid-template-columns:78px minmax(0,1fr) 54px;gap:10px;align-items:center;margin-block:6px}
+.meter .track{height:14px;background:var(--bg);border:1px solid var(--rule)}
+.meter .fill{display:block;height:100%;width:0;background:var(--stamp)}
+.meter .cnt{text-align:right;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:no-preference){.meter .fill{transition:width .3s ease}}
+#verdict{font-size:19px;line-height:1.45}
+#verdict b{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.02em;display:block;margin-bottom:4px}
+
+/* blame vs ownership */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;margin-top:28px}
+.two > div{padding:22px;border:1px solid var(--rule);background:var(--paper);display:flex;flex-direction:column;gap:12px;min-width:0}
+.two h3{font-size:28px}
+.two .blame h3{color:var(--stamp)}
+.two .own h3{color:var(--go)}
+.two ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+
+/* ledger */
+.ledger{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px 40px;background:var(--paper);border:2px solid var(--ink);padding:24px;margin-top:28px}
+.ledger form{display:flex;flex-direction:column;gap:16px}
+.ledger label{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.ledger input[type=number]{font:500 18px var(--mono);background:var(--bg);color:var(--ink);border:1.5px solid var(--ink);padding:10px 12px;width:100%;border-radius:0}
+.ledger input[type=range]{width:100%;accent-color:var(--go)}
+.ledger output{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px}
+.fig{border-top:3px solid var(--ink);padding-top:8px;min-width:0}
+.fig .v{font:800 clamp(28px,4vw,40px)/1 var(--display);font-variant-numeric:tabular-nums}
+.fig .l{font-size:14.5px;color:var(--muted);line-height:1.35;margin-top:4px}
+.ledger .out{display:flex;flex-direction:column;gap:16px;min-width:0}
+#sentence{font-size:18px;line-height:1.45}
+
+/* bmi */
+.bmi{--cat:var(--rule);--on-cat:var(--ink);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:24px 40px;background:var(--paper);border:2px solid var(--ink);padding:24px;margin-top:28px}
+.bmi[data-cat="low"]{--cat:var(--low);--on-cat:var(--on-low)}
+.bmi[data-cat="ok"]{--cat:var(--ok);--on-cat:var(--on-ok)}
+.bmi[data-cat="over"]{--cat:var(--amber);--on-cat:var(--on-amber)}
+.bmi[data-cat="obese"]{--cat:var(--red);--on-cat:var(--on-red)}
+.bmi form{display:flex;flex-direction:column;gap:16px;min-width:0}
+.units{display:flex;flex-wrap:wrap;gap:8px 22px}
+.units label{display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer}
+.units input{width:20px;height:20px;margin:0;accent-color:var(--ink)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-weight:600;min-width:0}
+.fields input{font:500 18px var(--mono);background:var(--bg);color:var(--ink);border:1.5px solid var(--ink);padding:10px 12px;width:100%;border-radius:0}
+.bmi-out{display:flex;flex-direction:column;gap:18px;min-width:0}
+.bmi-num{display:flex;flex-wrap:wrap;border:2px solid var(--ink)}
+.bmi-num .v{background:var(--cat);color:var(--on-cat);font:800 clamp(60px,9vw,92px)/1 var(--display);font-variant-numeric:tabular-nums;padding:6px 22px 2px}
+.bmi-num .c{display:flex;flex-direction:column;justify-content:center;padding:10px 20px;gap:2px;min-width:0}
+.bmi-num .c b{font:800 clamp(26px,3.6vw,38px)/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.scale{position:relative;margin-top:14px;padding-bottom:24px}
+.bands{display:flex;height:16px;border:1px solid var(--ink)}
+.bands span{display:block;height:100%}
+.bands .b-low{width:14%;background:var(--low)}
+.bands .b-ok{width:26%;background:var(--ok)}
+.bands .b-over{width:20%;background:var(--amber)}
+.bands .b-obese{width:40%;background:var(--red)}
+.mark{position:absolute;top:-8px;left:50%;width:4px;height:32px;background:var(--ink);transform:translateX(-50%);outline:2px solid var(--paper)}
+.tick{position:absolute;top:24px;transform:translateX(-50%);font:500 12px/1 var(--mono);color:var(--muted)}
+#bmiText{font-size:18px;line-height:1.45}
+#bmiText b{font-family:var(--display);font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.btn{font:800 20px/1 var(--display);text-transform:uppercase;letter-spacing:.04em;background:var(--ink);color:var(--paper);border:0;padding:12px 18px 10px;cursor:pointer;align-self:flex-start}
+@media (prefers-reduced-motion:no-preference){.mark{transition:left .3s ease}}
+
+/* medical */
+.medical{border:2px solid var(--ink);background:var(--paper);padding:24px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:16px 40px}
+.medical h2{font-size:clamp(24px,3.4vw,36px)}
+
+/* do and don't */
+.dd{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;margin-top:24px}
+.dd ul{margin:10px 0 0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+.dd h3{font-size:26px}
+.final{font:700 clamp(22px,3.2vw,34px)/1.2 var(--display);margin-top:36px;max-width:22em;text-wrap:balance}
+footer{border-top:2px solid var(--ink);padding-top:16px;font-size:14px;color:var(--muted);max-width:60em}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:minmax(0,1fr);gap:32px;padding-block:32px 40px}
+  .row,.medical{grid-template-columns:minmax(0,1fr);gap:10px}
+  .row > .mono{padding-top:0}
+  .result,.ledger,.bmi{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="bar mono">
+    <span class="brand">Own It</span>
+    <span class="tag">Weighing ticket No. 0001 &nbsp;·&nbsp; Net weight: your call</span>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="mono muted">For adults who choose their own food and their own movement</p>
+      <h1>If you are overweight, it's on you!</h1>
+      <p class="lede">Greedy. Lazy. Unwise. Usually a mix of them. Not one of the three is somebody else's fault, and all three can be fixed starting today.</p>
+      <p class="lede">This site tells you what to do and then leaves the decision with you. It will not nag, chase or push. It will tell you plainly that a lower weight and better health are within reach, if you take hold of the controls.</p>
+    </div>
+    <aside class="ticket" aria-label="Weighing ticket">
+      <div class="t-head mono"><span>Weighing ticket</span><span>No. 0001</span></div>
+      <p class="mono muted">Cause of excess weight. Tick all that apply.</p>
+      <ul class="t-list">
+        <li><span class="box">X</span><b>Greedy</b><i>Eating more than you need</i></li>
+        <li><span class="box">X</span><b>Lazy</b><i>Moving less than you could</i></li>
+        <li><span class="box">X</span><b>Unwise</b><i>Not knowing, or ignoring, what works</i></li>
+      </ul>
+      <div class="t-foot"><span class="mono">Controlled by</span><span class="stamp">You</span></div>
+    </aside>
+  </div>
+
+  <section>
+    <div class="row">
+      <p class="mono">The arithmetic</p>
+      <div class="prose">
+        <p class="big">Weight goes up when more energy goes in than comes out. There is no third input.</p>
+        <p>Your body stores the surplus as fat. Roughly 7,700 kcal of surplus makes a kilo. Nobody gains weight on food they did not eat, and nobody keeps it on while eating less than they metabolise.</p>
+        <p class="eqn"><span>500 kcal a day too much</span> &nbsp;→&nbsp; <span>about 0.45 kg of fat a week</span> &nbsp;→&nbsp; <span>about 23 kg a year</span></p>
+        <p>The NHS guideline for an average adult is about 2,500 kcal a day for a man and 2,000 for a woman. A pint of lager, a chocolate bar and a skipped walk can cover the 500 without you noticing. That is how the weight arrives. It arrives slowly, through your own choices, one ordinary day at a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">The three reasons</p>
+      <div class="prose">
+        <h2>Find yours. Then you know where to start.</h2>
+        <p>The words are blunt on purpose. Each one describes something you do, which means each one is something you can stop doing.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <h3>Greedy</h3>
+        <p class="def">Eating beyond what your body needs because it is there and it tastes good.</p>
+        <h4>Where it shows up</h4>
+        <ul>
+          <li>Second helpings. Finishing the plate, and the kids' plates.</li>
+          <li>Calories you drink: beer, wine, sugary drinks, large milky coffees.</li>
+          <li>Grazing between meals out of habit rather than hunger.</li>
+          <li>Eating because you are bored, stressed or it is Friday.</li>
+        </ul>
+        <h4>What to do</h4>
+        <ul class="fix">
+          <li>Serve one portion. Put the rest away before you sit down.</li>
+          <li>Cut drinks first. They are the easiest calories to remove.</li>
+          <li>Eat at set times and stop snacking between them for two weeks.</li>
+          <li>Do not keep the stuff in the house.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Lazy</h3>
+        <p class="def">Sitting when you could stand. Driving when you could walk. Choosing the sofa.</p>
+        <h4>Where it shows up</h4>
+        <ul>
+          <li>Under 5,000 steps on most days.</li>
+          <li>Driving for trips under a mile.</li>
+          <li>Evenings and weekends flat out in front of a screen.</li>
+          <li>No strength work, so muscle shrinks and you metabolise less at rest.</li>
+        </ul>
+        <h4>What to do</h4>
+        <ul class="fix">
+          <li>Walk every day. Build towards 8,000 to 10,000 steps.</li>
+          <li>Lift something heavy twice a week.</li>
+          <li>Take the stairs, park further away, stand for calls.</li>
+          <li>Put it in the diary. Movement that is not scheduled does not happen.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Unwise</h3>
+        <p class="def">Not knowing how it works, or knowing and ignoring it.</p>
+        <h4>Where it shows up</h4>
+        <ul>
+          <li>Believing a walk cancels out a chocolate bar. It takes over two miles.</li>
+          <li>Trusting labels like "healthy", "low fat" or "natural".</li>
+          <li>Never weighing yourself and never counting anything.</li>
+          <li>Crash dieting, rebounding, and repeating.</li>
+        </ul>
+        <h4>What to do</h4>
+        <ul class="fix">
+          <li>Learn the calories in the twenty foods you eat most.</li>
+          <li>Weigh yourself weekly, same day, same time. Write it down.</li>
+          <li>Track everything you eat for two weeks. Most people undercount.</li>
+          <li>Aim for 0.5 to 1 kg a week. Slow wins.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="tbl" role="region" aria-label="Approximate calories compared with walking" tabindex="0">
+      <table>
+        <thead><tr><th>Where the calories hide</th><th class="n">Approx. kcal</th><th class="n">Miles of walking to metabolise it</th></tr></thead>
+        <tbody>
+          <tr><td>Pint of lager</td><td class="n">200</td><td class="n">2.0</td></tr>
+          <tr><td>Large glass of wine (250 ml)</td><td class="n">200</td><td class="n">2.0</td></tr>
+          <tr><td>Can of cola (330 ml)</td><td class="n">140</td><td class="n">1.4</td></tr>
+          <tr><td>Standard chocolate bar</td><td class="n">230</td><td class="n">2.3</td></tr>
+          <tr><td>Whole large takeaway pizza</td><td class="n">1,800 and up</td><td class="n">18 and up</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Rough figures, assuming about 100 kcal metabolised per mile. Heavier people metabolise a little more per mile, lighter people a little less.</p>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">The self-check</p>
+      <div class="prose">
+        <h2>Tick what is true. Be straight with yourself.</h2>
+        <p>Nobody is watching and nothing is saved. The point is to see which of the three is doing the most work.</p>
+      </div>
+    </div>
+
+    <div class="check">
+      <fieldset>
+        <legend>Greedy</legend>
+        <label class="chk" for="g1"><input type="checkbox" id="g1" data-k="g"><span>I finish the plate even when I am full.</span></label>
+        <label class="chk" for="g2"><input type="checkbox" id="g2" data-k="g"><span>I drink calories most days: alcohol, fizzy drinks, sweet coffees.</span></label>
+        <label class="chk" for="g3"><input type="checkbox" id="g3" data-k="g"><span>I snack between meals out of habit.</span></label>
+        <label class="chk" for="g4"><input type="checkbox" id="g4" data-k="g"><span>I eat when I am bored or stressed.</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Lazy</legend>
+        <label class="chk" for="l1"><input type="checkbox" id="l1" data-k="l"><span>I rarely reach 5,000 steps in a day.</span></label>
+        <label class="chk" for="l2"><input type="checkbox" id="l2" data-k="l"><span>I drive for trips I could easily walk.</span></label>
+        <label class="chk" for="l3"><input type="checkbox" id="l3" data-k="l"><span>I do no strength training at all.</span></label>
+        <label class="chk" for="l4"><input type="checkbox" id="l4" data-k="l"><span>I sit for most of the evening and most of the weekend.</span></label>
+      </fieldset>
+      <fieldset>
+        <legend>Unwise</legend>
+        <label class="chk" for="u1"><input type="checkbox" id="u1" data-k="u"><span>I could not tell you the calories in what I eat most.</span></label>
+        <label class="chk" for="u2"><input type="checkbox" id="u2" data-k="u"><span>I do not weigh myself regularly.</span></label>
+        <label class="chk" for="u3"><input type="checkbox" id="u3" data-k="u"><span>I think exercise lets me eat what I like.</span></label>
+        <label class="chk" for="u4"><input type="checkbox" id="u4" data-k="u"><span>I have crash dieted before and put it all back on.</span></label>
+      </fieldset>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div>
+        <div class="meter mono"><span>Greedy</span><span class="track"><span class="fill" id="bar-g"></span></span><span class="cnt" id="n-g">0 of 4</span></div>
+        <div class="meter mono"><span>Lazy</span><span class="track"><span class="fill" id="bar-l"></span></span><span class="cnt" id="n-l">0 of 4</span></div>
+        <div class="meter mono"><span>Unwise</span><span class="track"><span class="fill" id="bar-u"></span></span><span class="cnt" id="n-u">0 of 4</span></div>
+      </div>
+      <p id="verdict"><b>Nothing ticked yet</b>Tick the statements that apply and your biggest lever shows up here.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">Blame and ownership</p>
+      <div class="prose">
+        <h2>Blaming is easy. It also does nothing.</h2>
+        <p>Pointing at someone else feels good. It is free, it is quick and it brings instant relief. It does not move the scale by a single gram.</p>
+      </div>
+    </div>
+    <div class="two">
+      <div class="blame">
+        <h3>If it is somebody else's fault</h3>
+        <ul>
+          <li>The fix is somebody else's job.</li>
+          <li>You wait for them to change.</li>
+          <li>You feel better tonight and the same next year.</li>
+        </ul>
+      </div>
+      <div class="own">
+        <h3>If it is yours</h3>
+        <ul>
+          <li>The fix is yours, so you can start tonight.</li>
+          <li>You have agency over what you eat, drink and do.</li>
+          <li>Your body is the most important thing you will ever own, and you hold the controls.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">The number</p>
+      <div class="prose">
+        <h2>Check your BMI.</h2>
+        <p>Enter your height and weight. Amber means overweight. Red means obese. The number is your weight in kilograms divided by your height in metres, squared.</p>
+      </div>
+    </div>
+
+    <div class="bmi" id="bmi" data-cat="over">
+      <form id="bmiForm" aria-label="BMI calculator">
+        <div class="units" role="radiogroup" aria-label="Units">
+          <label for="uMet"><input type="radio" name="units" id="uMet" value="m" checked>Metric (cm, kg)</label>
+          <label for="uImp"><input type="radio" name="units" id="uImp" value="i">Feet and stone</label>
+        </div>
+        <div class="fields" id="fMet">
+          <label for="hCm">Height (cm)<input type="number" id="hCm" value="180" min="100" max="250" step="0.5" inputmode="decimal"></label>
+          <label for="wKg">Weight (kg)<input type="number" id="wKg" value="95" min="30" max="400" step="0.1" inputmode="decimal"></label>
+        </div>
+        <div class="fields" id="fImp" hidden>
+          <label for="hFt">Height (ft)<input type="number" id="hFt" value="5" min="3" max="8" step="1" inputmode="numeric"></label>
+          <label for="hIn">Height (in)<input type="number" id="hIn" value="11" min="0" max="11.9" step="0.5" inputmode="decimal"></label>
+          <label for="wSt">Weight (st)<input type="number" id="wSt" value="14" min="4" max="60" step="1" inputmode="numeric"></label>
+          <label for="wLb">Weight (lb)<input type="number" id="wLb" value="13" min="0" max="13.9" step="0.5" inputmode="decimal"></label>
+        </div>
+        <p class="note" style="margin:0">Starting figures are an example. Change them to yours.</p>
+      </form>
+
+      <div class="bmi-out" aria-live="polite">
+        <div class="bmi-num">
+          <span class="v" id="bmiVal">29.3</span>
+          <span class="c"><span class="mono muted">Your BMI</span><b id="bmiCat">Overweight</b></span>
+        </div>
+        <div class="scale" aria-hidden="true">
+          <div class="bands"><span class="b-low"></span><span class="b-ok"></span><span class="b-over"></span><span class="b-obese"></span></div>
+          <span class="mark" id="bmiMark"></span>
+          <span class="tick" style="left:14%">18.5</span>
+          <span class="tick" style="left:40%">25</span>
+          <span class="tick" style="left:60%">30</span>
+        </div>
+        <p id="bmiText"></p>
+        <button type="button" class="btn" id="bmiTarget" hidden>Use as my target below</button>
+        <p class="note" style="margin:0">BMI is a rough screen. Very muscular people read high. NHS cut-offs are lower for people of South Asian and some other backgrounds.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">The ledger</p>
+      <div class="prose">
+        <h2>Put a number on it.</h2>
+        <p>Set a target and a daily shortfall, and see what the arithmetic says. The NHS suggests aiming for around 600 kcal a day less than you use. That is one pint, one chocolate bar and a fast walk.</p>
+      </div>
+    </div>
+
+    <div class="ledger">
+      <form id="ledgerForm" aria-label="Weight loss calculator">
+        <label for="wNow">Weight now (kg)
+          <input type="number" id="wNow" value="95" min="40" max="300" step="0.1" inputmode="decimal">
+        </label>
+        <label for="wTarget">Target weight (kg)
+          <input type="number" id="wTarget" value="80" min="40" max="300" step="0.1" inputmode="decimal">
+        </label>
+        <label for="wDef">Daily shortfall: <output id="wDefOut" for="wDef">600</output> kcal
+          <input type="range" id="wDef" min="200" max="1000" step="50" value="600">
+        </label>
+        <p class="note" style="margin:0">Starting figures are an example. Change them to yours.</p>
+      </form>
+      <div class="out">
+        <div class="figs">
+          <div class="fig"><div class="v" id="oWeek">0.55</div><div class="l">kg lost per week</div></div>
+          <div class="fig"><div class="v" id="oWeeks">28</div><div class="l">weeks to target</div></div>
+          <div class="fig"><div class="v" id="oDate" style="font-size:clamp(26px,3.4vw,36px)">22 Apr 2027</div><div class="l">estimated date</div></div>
+        </div>
+        <p id="sentence">From 14 st 13 lb to 12 st 8 lb is 15 kg of fat to lose.</p>
+        <p class="note" style="margin:0">A paper figure. The body adapts as you lose, so real progress is usually a little slower. Use it to plan, then let the scale tell you the truth.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="medical">
+      <p class="mono muted" style="padding-top:8px">One exception to rule out</p>
+      <div class="prose">
+        <h2>See your GP first</h2>
+        <p>A small minority of people have a medical factor that makes this harder: an underactive thyroid, steroid tablets, some antidepressants, PCOS. Get it checked. One GP appointment and a blood test will rule most of them in or out.</p>
+        <p class="big">Once you know, what you do next is yours. Carrying on and doing nothing about it is the unwise part.</p>
+        <p>Whatever started it, staying overweight comes down to greedy, lazy or unwise. A medical cause changes how hard the job is. It does not change who has to do it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="row">
+      <p class="mono">What this service does</p>
+      <div>
+        <h2>Advice, plainly given. The choice stays with you.</h2>
+        <div class="dd">
+          <div>
+            <h3>It will</h3>
+            <ul>
+              <li>Tell you straight which of the three is at work.</li>
+              <li>Show you the arithmetic and the numbers.</li>
+              <li>Give you concrete steps to start with.</li>
+              <li>Say clearly that lower weight and better health are within your grasp.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>It will not</h3>
+            <ul>
+              <li>Force you, chase you or send you reminders.</li>
+              <li>Accept blame as an answer.</li>
+              <li>Sell you a pill, a plan or a subscription.</li>
+              <li>Decide for you. That part is yours.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="final">It is all in your control. Whether you use it is up to you.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    General information, not medical advice. If you take medication, have a medical condition, or have a lot of weight to lose, speak to your GP before you change what you eat or how you exercise. All calorie and weight figures are approximations.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var names={g:'Greedy',l:'Lazy',u:'Unwise'};
+  var tips={
+    g:'Start with the plate and the glass. Portion size and drinks are your fastest win.',
+    l:'Start with walking. Add steps every week before anything else.',
+    u:'Start by measuring. Weigh yourself weekly and track your food for two weeks.'
+  };
+  var boxes=document.querySelectorAll('.chk input');
+  var verdict=document.getElementById('verdict');
+  function updateCheck(){
+    var c={g:0,l:0,u:0},total=0,i,k;
+    for(i=0;i<boxes.length;i++){
+      if(boxes[i].checked){c[boxes[i].getAttribute('data-k')]++;total++;}
+    }
+    ['g','l','u'].forEach(function(k){
+      document.getElementById('bar-'+k).style.width=(c[k]/4*100)+'%';
+      document.getElementById('n-'+k).textContent=c[k]+' of 4';
+    });
+    if(!total){
+      verdict.innerHTML='<b>Nothing ticked yet</b>Tick the statements that apply and your biggest lever shows up here.';
+      return;
+    }
+    var max=Math.max(c.g,c.l,c.u),top=[];
+    for(k in c){if(c[k]===max){top.push(k);}}
+    var title=top.map(function(k){return names[k];}).join(' and ');
+    var body=top.map(function(k){return tips[k];}).join(' ');
+    verdict.innerHTML='<b>Biggest lever: '+title+'</b>'+body+' You ticked '+total+' of 12.';
+  }
+  for(var i=0;i<boxes.length;i++){boxes[i].addEventListener('change',updateCheck);}
+
+  var now=document.getElementById('wNow'),tgt=document.getElementById('wTarget'),def=document.getElementById('wDef');
+  function stone(kg){
+    var lb=kg*2.2046226,st=Math.floor(lb/14),rem=Math.round(lb-st*14);
+    if(rem===14){st+=1;rem=0;}
+    return st+' st '+rem+' lb';
+  }
+  function updateLedger(){
+    var a=parseFloat(now.value),b=parseFloat(tgt.value),d=parseInt(def.value,10);
+    document.getElementById('wDefOut').textContent=d;
+    var perWeek=d*7/7700;
+    document.getElementById('oWeek').textContent=perWeek.toFixed(2);
+    var s=document.getElementById('sentence');
+    if(isNaN(a)||isNaN(b)){return;}
+    if(b>=a){
+      document.getElementById('oWeeks').textContent='0';
+      document.getElementById('oDate').textContent='Done';
+      s.textContent='You are already at or under your target. Pick a lower one if you want to keep going.';
+      return;
+    }
+    var lose=a-b,weeks=Math.ceil(lose/perWeek);
+    var date=new Date();date.setDate(date.getDate()+weeks*7);
+    document.getElementById('oWeeks').textContent=weeks;
+    document.getElementById('oDate').textContent=date.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    s.textContent='From '+stone(a)+' to '+stone(b)+' is '+(Math.round(lose*10)/10)+' kg of fat to lose.';
+  }
+  [now,tgt,def].forEach(function(el){el.addEventListener('input',updateLedger);});
+  document.getElementById('ledgerForm').addEventListener('submit',function(e){e.preventDefault();});
+  /* BMI */
+  var bmiBox=document.getElementById('bmi'),imp=false;
+  var $=function(id){return document.getElementById(id);};
+  function lbStr(kg){
+    var lb=Math.round(kg*2.2046226),st=Math.floor(lb/14),rem=lb-st*14;
+    return st?st+' st '+rem+' lb':rem+' lb';
+  }
+  function amt(kg){return imp?lbStr(kg):(Math.round(kg*10)/10)+' kg';}
+  function readBmi(){
+    if(imp){
+      return {h:(parseFloat($('hFt').value)*12+(parseFloat($('hIn').value)||0))*0.0254,
+              w:(parseFloat($('wSt').value)*14+(parseFloat($('wLb').value)||0))*0.45359237};
+    }
+    return {h:parseFloat($('hCm').value)/100,w:parseFloat($('wKg').value)};
+  }
+  function writeBmi(h,w){
+    if(!(h>0&&w>0)){return;}
+    var totalIn=h/0.0254,ft=Math.floor(totalIn/12),inch=Math.round((totalIn-ft*12)*2)/2;
+    if(inch>=12){ft+=1;inch=0;}
+    var lb=w*2.2046226,st=Math.floor(lb/14),rl=Math.round((lb-st*14)*2)/2;
+    if(rl>=14){st+=1;rl=0;}
+    $('hCm').value=Math.round(h*1000)/10;$('wKg').value=Math.round(w*10)/10;
+    $('hFt').value=ft;$('hIn').value=inch;$('wSt').value=st;$('wLb').value=rl;
+  }
+  var maxKg=0;
+  function updateBmi(){
+    var r=readBmi(),h=r.h,w=r.w,val=$('bmiVal'),cat=$('bmiCat'),txt=$('bmiText'),btn=$('bmiTarget'),mark=$('bmiMark');
+    btn.hidden=true;
+    if(!(h>=1&&h<=2.6&&w>=20&&w<=400)){
+      bmiBox.setAttribute('data-cat','none');
+      val.textContent='--';cat.textContent='Enter height and weight';
+      txt.textContent='Fill in both boxes to see your number.';
+      mark.style.left='0%';
+      return;
+    }
+    var bmi=Math.round(w/(h*h)*10)/10,key,label,lead;
+    maxKg=Math.floor(24.9*h*h*10)/10;
+    var minKg=Math.round(18.5*h*h*10)/10;
+    var over=Math.round((w-maxKg)*10)/10;
+    if(bmi<18.5){key='low';label='Underweight';lead='This site is not aimed at you. Speak to your GP.';}
+    else if(bmi<25){key='ok';label='Healthy';lead='Healthy range. Keep doing what you are doing.';}
+    else if(bmi<30){key='over';label='Overweight';lead='Amber. It\'s on you, and it is fixable. You are '+amt(over)+' above the top of the healthy range for your height.';}
+    else{key='obese';label='Obese';lead='Red. It\'s on you, and it is fixable. You are '+amt(over)+' above the top of the healthy range for your height.';}
+    bmiBox.setAttribute('data-cat',key);
+    val.textContent=bmi.toFixed(1);cat.textContent=label;
+    mark.style.left=Math.min(1,Math.max(0,(bmi-15)/25))*100+'%';
+    txt.innerHTML='<b>'+label+'.</b> '+lead+' Healthy range for your height: '+amt(minKg)+' to '+amt(maxKg)+'.';
+    if(bmi>=25){btn.hidden=false;btn.textContent='Use '+amt(maxKg)+' as my target below';}
+    /* carry weight into the ledger */
+    $('wNow').value=Math.round(w*10)/10;
+    updateLedger();
+  }
+  ['hCm','wKg','hFt','hIn','wSt','wLb'].forEach(function(id){$(id).addEventListener('input',updateBmi);});
+  ['uMet','uImp'].forEach(function(id){
+    $(id).addEventListener('change',function(){
+      var r=readBmi();
+      imp=$('uImp').checked;
+      writeBmi(r.h,r.w);
+      $('fMet').hidden=imp;$('fImp').hidden=!imp;
+      updateBmi();
+    });
+  });
+  $('bmiTarget').addEventListener('click',function(){
+    $('wTarget').value=maxKg;
+    updateLedger();
+  });
+  $('bmiForm').addEventListener('submit',function(e){e.preventDefault();});
+
+  updateCheck();updateLedger();updateBmi();
+})();
+</script>
+
+</body>
+</html>
